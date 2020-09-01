@@ -59,7 +59,7 @@ RUN git clone https://github.com/intel/media-driver.git media-driver && \
 
 RUN git clone https://github.com/Intel-Media-SDK/MediaSDK msdk && \
    cd msdk && \
-   git checkout 543138c85b9d54f172fd83f7e8aefc9846413a0f && \
+#   git checkout 543138c85b9d54f172fd83f7e8aefc9846413a0f && \
    mkdir build && \
    cd build && \
    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_TOOLS=ON .. && \
