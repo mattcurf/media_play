@@ -20,6 +20,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
       libpciaccess-dev \
       xutils-dev \
       libx11-dev \
+      libxcb-dri3-dev \
+      libx11-xcb-dev \
+      libxcb-present-dev \
       xorg-dev && \
     rm -rf /var/lib/apt/lists/*
 
@@ -59,10 +62,10 @@ RUN git clone https://github.com/intel/media-driver.git media-driver && \
 
 RUN git clone https://github.com/Intel-Media-SDK/MediaSDK msdk && \
    cd msdk && \
-#   git checkout 543138c85b9d54f172fd83f7e8aefc9846413a0f && \
+   git checkout intel-mediasdk-20.2.0 && \
    mkdir build && \
    cd build && \
-   cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_TOOLS=ON .. && \
+   cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_TOOLS=ON -DENABLE_X11_DRI3=ON .. && \
    make -j$(nproc) && \
    make install 
 

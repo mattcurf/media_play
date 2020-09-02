@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       lsb-release \
       libva-x11-2 \
       libva-drm2 \
-      xorg
+      xorg && \
+   rm -rf /var/lib/apt/lists/* 
 
 # Install OpenCL and MSDK
 RUN echo "deb [trusted=yes arch=amd64] https://repositories.intel.com/graphics/ubuntu focal main" > /etc/apt/sources.list.d/intel-graphics.list && \ 
