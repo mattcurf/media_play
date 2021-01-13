@@ -26,43 +26,36 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
       xorg-dev && \
     rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/intel/libva.git libva  && \
+RUN git clone --depth=1 -b 2.10.0 https://github.com/intel/libva.git libva  && \
    cd libva && \
-   git checkout ccf3b081ff3d2b0784cd66daf04bbc317277cf8b && \
    ./autogen.sh --prefix=/usr --libdir=/usr/lib/x86_64-linux-gnu && \
    make -j$(nproc) && \
    make install
 
-RUN git clone https://github.com/intel/gmmlib gmmlib && \
+RUN git clone --depth=1 -b 2.10.0 https://github.com/intel/libva-utils libva-utils && \
+   cd libva-utils && \
+   ./autogen.sh --prefix=/usr --libdir=/usr/lib/x86_64-linux-gnu && \
+   make -j$(nproc) && \
+   make install
+
+RUN git clone --depth=1 -b intel-gmmlib-20.4.1 https://github.com/intel/gmmlib gmmlib && \
    cd gmmlib && \
-   git checkout d7a0586104096f3e2241e2a773c6bc41a9e2c422 && \
    mkdir build_gmm && \
    cd build_gmm && \
    cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .. && \
    make -j$(nproc) && \
    make install
 
-RUN git clone https://anongit.freedesktop.org/git/mesa/drm.git libdrm && \
-   cd libdrm && \
-   git checkout 9fbae6f6ad7994240e25e7823573604d4a9be4c4 && \
-   mkdir build && \
-   cd build && \
-   meson --prefix=/usr -Dudev=true && \
-   ninja && \
-   ninja install
-
-RUN git clone https://github.com/intel/media-driver.git media-driver && \
+RUN git clone --depth=1 -b intel-media-20.4.5 https://github.com/intel/media-driver.git media-driver && \
    cd media-driver && \
-   git checkout d7061b608ad4d55fccab00f8d80b852f20eab1d7 && \
    mkdir build && \
    cd build && \
    cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .. && \
    make -j$(nproc) && \
    make install
 
-RUN git clone https://github.com/Intel-Media-SDK/MediaSDK msdk && \
+RUN git clone --depth=1 -b intel-mediasdk-20.5.1 https://github.com/Intel-Media-SDK/MediaSDK msdk && \
    cd msdk && \
-   git checkout intel-mediasdk-20.2.0 && \
    mkdir build && \
    cd build && \
    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_TOOLS=ON -DENABLE_X11_DRI3=ON .. && \
@@ -74,4 +67,3 @@ RUN echo 'LIBVA_DRIVERS_PATH=/opt/intel/mediasdk/lib' >> /etc/environment && \
     echo 'LIBRARY_PATH=/opt/intel/mediasdk/lib:${LIBRARY_PATH}' >> /etc/environment && \
     echo 'PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:/opt/intel/mediasdk/lib64/pkgconfig' >> /etc/environment && \
    ldconfig
-
