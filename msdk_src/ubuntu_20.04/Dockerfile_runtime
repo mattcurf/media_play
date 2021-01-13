@@ -1,15 +1,17 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 # Install prerequisites
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+ARG TZ=America/New_York
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
    apt-get install -y -q --no-install-recommends \
       libdrm-intel1 \
       xutils \
       xorg && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=msdk /opt/intel/mediasdk/lib /opt/intel/mediasdk/lib 
-COPY --from=msdk /opt/intel/mediasdk/share /opt/intel/mediasdk/share
+COPY --from=msdk:20.04 /opt/intel/mediasdk/lib /opt/intel/mediasdk/lib 
+COPY --from=msdk:20.04 /opt/intel/mediasdk/share /opt/intel/mediasdk/share
 RUN rm -rf /opt/intel/mediasdk/lib/pkgconfig
 
 RUN echo 'LIBVA_DRIVERS_PATH=/opt/intel/mediasdk/lib' >> /etc/environment && \

@@ -1,20 +1,19 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 WORKDIR /build
 
 # Install prerequisites
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+ARG TZ=America/New_York
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
    apt-get install -y -q --no-install-recommends \
       lsb-release \
       build-essential \
-#      wget \
       git \
       ca-certificates \
       cmake \
       autoconf \
       autotools-dev \
       automake libtool \
-#      ninja-build \
-#      meson \
       pkg-config \
       libdrm-dev \
       libpciaccess-dev \

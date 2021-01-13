@@ -1,0 +1,18 @@
+FROM ubuntu:18.04
+
+# Install prerequisites
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+   apt-get install -y -q --no-install-recommends \
+      libdrm-intel1 \
+      xutils \
+      xorg && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=msdk:18.04 /opt/intel/mediasdk/lib /opt/intel/mediasdk/lib 
+COPY --from=msdk:18.04 /opt/intel/mediasdk/share /opt/intel/mediasdk/share
+RUN rm -rf /opt/intel/mediasdk/lib/pkgconfig
+
+RUN echo 'LIBVA_DRIVERS_PATH=/opt/intel/mediasdk/lib' >> /etc/environment && \
+    echo 'LIBVA_DRIVER_NAME=iHD' >> /etc/environment && \
+    echo 'LIBRARY_PATH=/opt/intel/mediasdk/lib:${LIBRARY_PATH}' >> /etc/environment && \
+   ldconfig
